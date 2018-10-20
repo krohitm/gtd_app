@@ -38,6 +38,9 @@ source('visualizeCountMap.R', local = T)
 terr <- dataImport()
 ```
 
+General Figures
+=======================================================================
+
 Row
 -----------------------------------------------------------------------
 
@@ -59,8 +62,18 @@ terr %>%
   visualizeCountMap("Number of Deaths around the world")
 ```
 
-Row
+### Injured around the world
+
+```{r}
+terr %>%
+  group_by(nation) %>%
+  summarise(Total = sum(wounded)) %>%
+  visualizeCountMap("Number of Injured around the world")
+```
+
+Row {.tabset}
 -----------------------------------------------------------------------
+
 ### Casualties against Attacks over years
 
 ```{r}
@@ -68,8 +81,11 @@ casualtiesOverYears(terr)
 ```
 
 ### High Casualty Attacks
+
 ```{r}
 n = 10
 highCasualtyAttacks(terr, n)
 ```
 
+Factors
+=======================================================================
