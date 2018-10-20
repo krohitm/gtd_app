@@ -17,9 +17,22 @@ shinyUI(fluidPage(
                   selected = 'Global Attacks Over Years')
     ),
     
-    # Show a plot of the map
+    # Show a plot of the variable
     mainPanel(
       plotOutput("singleVar")
+    )
+  ),
+  
+  sidebarLayout(
+    sidebarPanel(
+      selectInput(inputId = "mapParameter", label="Parameter", 
+                  choices=c('Number of Attacks around the world'),
+                  selected = 'Number of Attacks around the world')
+    ),
+    
+    # Show a plot of the map
+    mainPanel(
+      plotOutput("mapPlot")
     )
   )
 ))
