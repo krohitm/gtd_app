@@ -1,0 +1,93 @@
+---
+title: "Untitled"
+output: 
+  flexdashboard::flex_dashboard:
+    vertical_layout: fill
+    orientation: rows
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyr)
+library(dplyr)
+library(rworldmap)
+library(maps)
+library(ggmap)
+library(reshape2)
+library(raster)
+library(rgdal)
+library(rgeos)
+library(ggmosaic)
+library(shiny)
+library(plotly)
+```
+
+```{r}
+#source files
+source ('./functions/dataImport.R', local = T)
+source ('./functions/attacksOverYears.R', local = T)
+source ('./functions/casualtiesOverYears.R', local = T)
+source ('./functions/highCasualtyAttacks.R', local = T)
+source ('./functions/highCasualtyGroups.R', local = T)
+source('./functions/mostAttackedCountries.R', local = T)
+source('./functions/visualizeCountMap.R', local = T)
+```
+
+```{r}
+terr <- dataImport()
+```
+
+General Figures
+=======================================================================
+
+Row
+-----------------------------------------------------------------------
+
+### Attacks around the world
+
+```{r}
+terr %>%
+  group_by(nation) %>%
+  summarise(Total = n()) %>%
+  visualizeCountMap("Number of terrorist attacks around the world")
+```
+
+### Deaths around the world
+
+```{r}
+terr %>%
+  group_by(nation) %>%
+  summarise(Total = sum(Killed)) %>%
+  visualizeCountMap("Number of Deaths around the world")
+```
+
+### Injured around the world
+
+```{r}
+terr %>%
+  group_by(nation) %>%
+  summarise(Total = sum(wounded)) %>%
+  visualizeCountMap("Number of Injured around the world")
+```
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Casualties against Attacks over years
+
+```{r}
+casualtiesOverYears(terr)
+```
+
+### High Casualty Attacks
+
+```{r}
+n = 10
+highCasualtyAttacks(terr, n)
+```
+
+Factors
+=======================================================================
+
+Row {.tabset}
+-----------------------------------------------------------------------
