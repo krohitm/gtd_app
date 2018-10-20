@@ -26,7 +26,8 @@ shinyUI(fluidPage(
   sidebarLayout(
     sidebarPanel(
       selectInput(inputId = "mapParameter", label="Parameter", 
-                  choices=c('Number of Attacks around the world'),
+                  choices=c('Number of Attacks around the world', 
+                            'Number of Deaths around the world'),
                   selected = 'Number of Attacks around the world')
     ),
     

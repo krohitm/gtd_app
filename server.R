@@ -54,5 +54,11 @@ shinyServer(function(input, output) {
       group_by(nation) %>%
       summarise(Total = n()) %>%
       visualizeCountMap("Number of terrorist attacks around the world")
+    else
+      if (input$mapParameter == 'Number of Deaths around the world')
+        terr %>%
+      group_by(nation) %>%
+      summarise(Total = sum(Killed)) %>%
+      visualizeCountMap("Number of deaths because of terrorist attacks around the world")
   })
 })
