@@ -2,8 +2,8 @@
 
 # function for attacks by highest casualties(killed+wounded)
 highCasualtyAttacks <- function(terr) {
-  terr$casualties = as.integer(terr$Killed + terr$wounded)
-  terr$casualties[which(is.na(terr$casualties))] = 0
+  terr$casualties <- as.integer(terr$Killed + terr$wounded)
+  terr$casualties[which(is.na(terr$casualties))] <- 0
   
   terr %>%
     top_n(15, casualties) %>%

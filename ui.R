@@ -11,9 +11,9 @@ shinyUI(fluidPage(
     sidebarPanel(
       selectInput(inputId = "graphType", label="Graph Type", 
                   choices=c('Global Attacks Over Years', 'Global Casualties Over Years',
-                            'Attacks with Highest Casualties'),
-                  selected = 'Global Attacks Over Years'),
-      sliderInput()
+                            'Attacks with Highest Casualties', 
+                            'Groups Responsible for Highest Casualties'),
+                  selected = 'Global Attacks Over Years')
     ),
     
     # Show a plot of the map

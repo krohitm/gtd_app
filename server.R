@@ -16,6 +16,7 @@ source ('dataImport.R', local = T)
 source ('attacksOverYears.R', local = T)
 source ('casualtiesOverYears.R', local = T)
 source ('highCasualtyAttacks.R', local = T)
+source ('highCasualtyGroups.R', local = T)
 
 terr <- dataImport()
 
@@ -34,5 +35,8 @@ shinyServer(function(input, output) {
     else
       if(input$graphType == "Attacks with Highest Casualties")
         highCasualtyAttacks(terr)
+    else
+      if(input$graphType == 'Groups Responsible for Highest Casualties')
+        highCasualtyGroups(terr)
   })
 })
