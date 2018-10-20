@@ -2,3 +2,4 @@
 *.DS_STORE
 ./data
 codebase*.R
+*.html

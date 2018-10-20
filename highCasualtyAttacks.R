@@ -5,7 +5,7 @@ highCasualtyAttacks <- function(terr, n) {
   terr$casualties <- as.integer(terr$Killed + terr$wounded)
   terr$casualties[which(is.na(terr$casualties))] <- 0
   
-  terr %>%
+  graph <- terr %>%
     top_n(n, casualties) %>%
     ggplot(mapping = aes(
       x = reorder(target1, -casualties),
@@ -16,8 +16,10 @@ highCasualtyAttacks <- function(terr, n) {
     theme(
       legend.position = "none",
       panel.background = NULL,
-      axis.text.x =  element_text(angle = 25, vjust = 1)
+      axis.text.x =  element_text(angle = 50, vjust = 1)
     ) +
     labs(x = "Target of attack", y = "Number of casualties",
          title = "Terrorist attacks with most casualties")
+  ggplotly(graph) %>%
+    return()
 }
