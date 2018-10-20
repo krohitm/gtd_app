@@ -12,7 +12,8 @@ shinyUI(fluidPage(
       selectInput(inputId = "graphType", label="Graph Type", 
                   choices=c('Global Attacks Over Years', 'Global Casualties Over Years',
                             'Attacks with Highest Casualties', 
-                            'Groups Responsible for Highest Casualties'),
+                            'Groups Responsible for Highest Casualties',
+                            'Most Attacked Countries'),
                   selected = 'Global Attacks Over Years')
     ),
     

@@ -17,6 +17,7 @@ source ('attacksOverYears.R', local = T)
 source ('casualtiesOverYears.R', local = T)
 source ('highCasualtyAttacks.R', local = T)
 source ('highCasualtyGroups.R', local = T)
+source('mostAttackedCountries.R', local = T)
 
 terr <- dataImport()
 
@@ -26,6 +27,9 @@ shinyServer(function(input, output) {
   output$singleVar <- renderPlot({
     #render plot of global attacks over years
     
+    #filler for later input parameter
+    n=10
+    
     #globalAttacksOverYears(terr)
     if (input$graphType == "Global Attacks Over Years")
       globalAttacksOverYears(terr)
@@ -34,9 +38,12 @@ shinyServer(function(input, output) {
         casualtiesOverYears(terr)
     else
       if(input$graphType == "Attacks with Highest Casualties")
-        highCasualtyAttacks(terr)
+        highCasualtyAttacks(terr, n)
     else
       if(input$graphType == 'Groups Responsible for Highest Casualties')
-        highCasualtyGroups(terr)
+        highCasualtyGroups(terr, n)
+    else
+      if(input$graphType == 'Most Attacked Countries')
+        mostAttackedCountries(terr, n)
   })
 })

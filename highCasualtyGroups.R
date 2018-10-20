@@ -1,11 +1,11 @@
 #function for terrorist groups leading to high casualties
 
-highCasualtyGroups <- function(terr) {
+highCasualtyGroups <- function(terr, n) {
   terr[c('gname', 'casualties')] %>%
     filter(gname != 'Unknown') %>%
     group_by(gname) %>%
     summarize(Total = n()) %>%
-    top_n(10, Total) %>%
+    top_n(n, Total) %>%
     ggplot(mapping = aes(
       x = reorder(gname,-Total),
       y = Total,
