@@ -12,13 +12,13 @@ library(ggmosaic)
 library(shiny)
 
 #source scripts
-source ('dataImport.R', local = T)
-source ('attacksOverYears.R', local = T)
-source ('casualtiesOverYears.R', local = T)
-source ('highCasualtyAttacks.R', local = T)
-source ('highCasualtyGroups.R', local = T)
-source('mostAttackedCountries.R', local = T)
-source('visualizeCountMap.R', local = T)
+source ('./functions/dataImport.R', local = T)
+source ('./functions/attacksOverYears.R', local = T)
+source ('./functions/casualtiesOverYears.R', local = T)
+source ('./functions/highCasualtyAttacks.R', local = T)
+source ('./functions/highCasualtyGroups.R', local = T)
+source('./functions/mostAttackedCountries.R', local = T)
+source('./functions/visualizeCountMap.R', local = T)
 
 terr <- dataImport()
 

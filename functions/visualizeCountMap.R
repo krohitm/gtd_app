@@ -1,4 +1,4 @@
-source('helper.R', local = T)
+source('./functions/helper.R', local = T)
 
 #helper function to visualize maps for varaibles for counts
 visualizeCountMap <- function(global_table, title) {
