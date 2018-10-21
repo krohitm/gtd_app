@@ -10,8 +10,7 @@ attacksOverYears <- function(terr) {
       panel.background = NULL,
       axis.text.x = element_text(angle = 45, vjust = 1)
     ) +
-    labs(x = "Year", y = "Number of attacks",
-         title = "Number of global attacks over years")
+    labs(x = "Year", y = "Number of attacks")
   
   ggplotly(graph)
 }
