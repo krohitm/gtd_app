@@ -100,4 +100,11 @@ visualizeFactorMap(terr, 'weapon',
                    "Most used weapons in terrorist attacks around the world")
 ```
 
+### Most used Attack Methods across countries
+
+```{r}
+visualizeFactorMap(terr, 'attack',
+                   "Most used attack methods around the world")
+```
+
 

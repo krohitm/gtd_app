@@ -29,7 +29,7 @@ visualizeFactorMap <- function(terr, factor, title) {
     ditch_the_axes +
     theme(panel.background = NULL) +
     geom_polygon(data = worldFactortypes,
-                 aes_string(fill = (factor)),
+                 aes_string(label = 'region', fill = (factor)),
                  color = "white") +
     scale_fill_manual(values = c(
       rainbow(
