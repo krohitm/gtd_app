@@ -14,7 +14,7 @@ visualizeCountMap <- function(global_table, world, title) {
   graph <-
     ggplot(data = world, aes(x = long, y = lat, group = group)) +
     coord_fixed(1.3) +
-    theme(legend.position = "none", panel.background = NULL) +
+    theme(panel.background = NULL) +
     geom_polygon(data = world_table,
                  aes(label = region, fill = Total),
                  color = "white") +

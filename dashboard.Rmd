@@ -47,7 +47,7 @@ Sys.setlocale('LC_ALL','C')
 General Figures
 =======================================================================
 
-Row
+Row {.tabset}
 -----------------------------------------------------------------------
 
 ### Attacks around the world
@@ -77,6 +77,26 @@ terr %>%
   visualizeCountMap(world, "Number of Injured around the world")
 ```
 
+### International Attacks
+
+```{r}
+terr[c('nation', 'INT_ANY')] %>% 
+  filter(INT_ANY=='1') %>%
+  group_by(nation) %>%
+  summarise(Total=n()) %>%
+  visualizeCountMap(world, "International attacks around the globe")
+```
+
+### Domestic Attacks
+
+```{r}
+terr[c('nation', 'INT_ANY')] %>% 
+  filter(INT_ANY=='0') %>%
+  group_by(nation) %>%
+  summarise(Total=n()) %>%
+  visualizeCountMap(world, "International attacks around the globe")
+```
+
 Row
 -----------------------------------------------------------------------
 
@@ -90,46 +110,6 @@ attacksOverYears(terr)
 
 ```{r}
 casualtiesOverYears(terr)
-```
-
-Row {.tabset}
------------------------------------------------------------------------
-
-### High Casualty Attacks
-
-```{r}
-n = 10
-
-terr[c('target1', 'casualties')] %>%
-  top_n(20, casualties) %>% 
-  mutate(target1 = forcats::fct_reorder(target1, -casualties)) %>%
-  highCasualtyFactor('target1', 'casualties', 
-                     xlab = 'Attack Target', ylab = 'Casualty Count')
-```
-
-### High Casualty Terrorist Groups
-
-```{r}
-terr[c('gname', 'casualties')]%>%
-  filter(gname!='Unknown') %>%
-  group_by(gname) %>%
-  summarise(casualties=n()) %>%
-  top_n(n, casualties) %>%
-  mutate(gname = forcats::fct_reorder(gname, -casualties)) %>%
-  highCasualtyFactor('gname', 'casualties', 
-                     xlab = 'Terrorist Group', ylab = 'Casualty Count')
-```
-
-### Most Attacked Countries
-
-```{r}
-terr['nation'] %>%
-  group_by(nation) %>%
-  summarise(Total=n()) %>%
-  top_n(n, Total) %>%
-  mutate(nation = forcats::fct_reorder(nation, -Total)) %>%
-  highCasualtyFactor('nation', 'Total', 
-                     xlab = 'Country', ylab = 'Attacks Count')
 ```
 
 Factors
@@ -174,4 +154,42 @@ graph <- terr %>%
 ggplotly(graph)
 ```
 
+Row {.tabset}
+-----------------------------------------------------------------------
 
+### High Casualty Attacks
+
+```{r}
+n = 10
+
+terr[c('target1', 'casualties')] %>%
+  top_n(n, casualties) %>% 
+  mutate(target1 = forcats::fct_reorder(target1, -casualties)) %>%
+  highCasualtyFactor('target1', 'casualties', 
+                     xlab = 'Attack Target', ylab = 'Casualty Count')
+```
+
+### High Casualty Terrorist Groups
+
+```{r}
+terr[c('gname', 'casualties')]%>%
+  filter(gname!='Unknown') %>%
+  group_by(gname) %>%
+  summarise(casualties=n()) %>%
+  top_n(n, casualties) %>%
+  mutate(gname = forcats::fct_reorder(gname, -casualties)) %>%
+  highCasualtyFactor('gname', 'casualties', 
+                     xlab = 'Terrorist Group', ylab = 'Casualty Count')
+```
+
+### Most Attacked Countries
+
+```{r}
+terr['nation'] %>%
+  group_by(nation) %>%
+  summarise(Total=n()) %>%
+  top_n(n, Total) %>%
+  mutate(nation = forcats::fct_reorder(nation, -Total)) %>%
+  highCasualtyFactor('nation', 'Total', 
+                     xlab = 'Country', ylab = 'Attacks Count')
+```
