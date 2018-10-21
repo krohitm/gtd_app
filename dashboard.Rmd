@@ -31,6 +31,7 @@ source ('./functions/highCasualtyAttacks.R', local = T)
 source ('./functions/highCasualtyGroups.R', local = T)
 source('./functions/mostAttackedCountries.R', local = T)
 source('./functions/visualizeCountMap.R', local = T)
+source('./functions/visualizeFactorMap.R', local = T)
 ```
 
 ```{r}
@@ -91,3 +92,12 @@ Factors
 
 Row {.tabset}
 -----------------------------------------------------------------------
+
+### Most used weapons across countries
+
+```{r}
+visualizeFactorMap(terr, 'weapon',
+                   "Most used weapons in terrorist attacks around the world")
+```
+
+

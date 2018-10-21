@@ -2,12 +2,7 @@
 #function to import and clean data
 dataImport <- function() {
   #input data
-  terr <- read.csv(
-    './data/globalterrorismdb_0616dist.csv',
-    check.names = FALSE,
-    header = TRUE,
-    stringsAsFactors = FALSE
-  )
+  terr <- readRDS(file = "./data/globalterrorismdb_0616dist.rds")
   
   #data cleaning
   #rename columns for easier understanding
