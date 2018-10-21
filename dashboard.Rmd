@@ -1,8 +1,8 @@
 ---
-title: "Untitled"
+title: "Global Terrorism Analysis (1970 - 2016)"
 output: 
   flexdashboard::flex_dashboard:
-    vertical_layout: fill
+    vertical_layout: scroll
     orientation: rows
 ---
 
@@ -28,7 +28,7 @@ source ('./functions/dataImport.R', local = T)
 source ('./functions/attacksOverYears.R', local = T)
 source ('./functions/casualtiesOverYears.R', local = T)
 source ('./functions/highCasualtyAttacks.R', local = T)
-source ('./functions/highCasualtyGroups.R', local = T)
+source ('./functions/highCasualtyFactor.R', local = T)
 source('./functions/mostAttackedCountries.R', local = T)
 source('./functions/visualizeCountMap.R', local = T)
 source('./functions/visualizeFactorMap.R', local = T)
@@ -36,6 +36,12 @@ source('./functions/visualizeFactorMap.R', local = T)
 
 ```{r}
 terr <- dataImport()
+world <- map_data("world")
+```
+
+```{r results='hide'}
+#for UTF-8 encoding
+Sys.setlocale('LC_ALL','C')
 ```
 
 General Figures
@@ -50,7 +56,7 @@ Row
 terr %>%
   group_by(nation) %>%
   summarise(Total = n()) %>%
-  visualizeCountMap("Number of terrorist attacks around the world")
+  visualizeCountMap(world, "Number of terrorist attacks around the world")
 ```
 
 ### Deaths around the world
@@ -59,7 +65,7 @@ terr %>%
 terr %>%
   group_by(nation) %>%
   summarise(Total = sum(Killed)) %>%
-  visualizeCountMap("Number of Deaths around the world")
+  visualizeCountMap(world, "Number of Deaths around the world")
 ```
 
 ### Injured around the world
@@ -68,23 +74,62 @@ terr %>%
 terr %>%
   group_by(nation) %>%
   summarise(Total = sum(wounded)) %>%
-  visualizeCountMap("Number of Injured around the world")
+  visualizeCountMap(world, "Number of Injured around the world")
 ```
 
-Row {.tabset}
+Row
 -----------------------------------------------------------------------
 
-### Casualties against Attacks over years
+### Attacks over years
+
+```{r}
+attacksOverYears(terr)
+```
+
+### Casualties over years
 
 ```{r}
 casualtiesOverYears(terr)
 ```
 
+Row {.tabset}
+-----------------------------------------------------------------------
+
 ### High Casualty Attacks
 
 ```{r}
 n = 10
-highCasualtyAttacks(terr, n)
+
+terr[c('target1', 'casualties')] %>%
+  top_n(20, casualties) %>% 
+  mutate(target1 = forcats::fct_reorder(target1, -casualties)) %>%
+  highCasualtyFactor('target1', 'casualties', 
+                     xlab = 'Attack Target', ylab = 'Casualty Count')
+```
+
+### High Casualty Terrorist Groups
+
+```{r}
+terr[c('gname', 'casualties')]%>%
+  filter(gname!='Unknown') %>%
+  group_by(gname) %>%
+  summarise(casualties=n()) %>%
+  top_n(n, casualties) %>%
+  mutate(gname = forcats::fct_reorder(gname, -casualties)) %>%
+  highCasualtyFactor('gname', 'casualties', 
+                     xlab = 'Terrorist Group', ylab = 'Casualty Count')
+```
+
+### Most Attacked Countries
+
+```{r}
+terr['nation'] %>%
+  group_by(nation) %>%
+  summarise(Total=n()) %>%
+  top_n(n, Total) %>%
+  mutate(nation = forcats::fct_reorder(nation, -Total)) %>%
+  highCasualtyFactor('nation', 'Total', 
+                     xlab = 'Country', ylab = 'Attacks Count')
 ```
 
 Factors
@@ -96,15 +141,37 @@ Row {.tabset}
 ### Most used weapons across countries
 
 ```{r}
-visualizeFactorMap(terr, 'weapon',
-                   "Most used weapons in terrorist attacks around the world")
+visualizeFactorMap(terr, world, 'weapon',
+                   "Most used weapons in terrorist attacks around the world") %>%
+  ggplotly()
 ```
 
 ### Most used Attack Methods across countries
 
 ```{r}
-visualizeFactorMap(terr, 'attack',
-                   "Most used attack methods around the world")
+visualizeFactorMap(terr, world, 'attack',
+                   "Most used attack methods around the world") %>%
+  ggplotly()
+```
+
+### Major target across countries
+
+```{r}
+visualizeFactorMap(terr, world, 'target',
+                   "Most attacked targets around the world") %>%
+  ggplotly()
+```
+
+### Most active groups across countries
+
+```{r}
+graph <- terr %>%
+  filter(gname != "Unknown") %>%
+  visualizeFactorMap(world, 'gname',
+                   "Most active groups around the world") +
+  theme(legend.position = "none")
+
+ggplotly(graph)
 ```
 
 

@@ -1,9 +1,7 @@
 source('./functions/helper.R', local = T)
 
 #helper function to visualize maps for varaibles for counts
-visualizeCountMap <- function(global_table, title) {
-  #import world map data
-  world <- map_data("world")
+visualizeCountMap <- function(global_table, world, title) {
   
   global_table <-
     global_table %>%
@@ -18,7 +16,7 @@ visualizeCountMap <- function(global_table, title) {
     coord_fixed(1.3) +
     theme(legend.position = "none", panel.background = NULL) +
     geom_polygon(data = world_table,
-                 aes(fill = Total),
+                 aes(label = region, fill = Total),
                  color = "white") +
     scale_fill_gradientn(colours = c("#e1eec3", "#f05053")) +
     #ggtitle(title) +

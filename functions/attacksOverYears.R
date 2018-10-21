@@ -1,7 +1,6 @@
 #global attacks over years
-globalAttacksOverYears <- function(terr) {
-
-  terr %>%
+attacksOverYears <- function(terr) {
+  graph <- terr %>%
     group_by(year) %>%
     summarize(NoOfAttacks = n()) %>%
     ggplot(mapping = aes(year, NoOfAttacks)) +
@@ -13,4 +12,6 @@ globalAttacksOverYears <- function(terr) {
     ) +
     labs(x = "Year", y = "Number of attacks",
          title = "Number of global attacks over years")
+  
+  ggplotly(graph)
 }

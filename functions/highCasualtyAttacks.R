@@ -1,14 +1,10 @@
 
-
 # function for attacks by highest casualties(killed+wounded)
 highCasualtyAttacks <- function(terr, n) {
-  terr$casualties <- as.integer(terr$Killed + terr$wounded)
-  terr$casualties[which(is.na(terr$casualties))] <- 0
-  
   graph <- terr %>%
     top_n(n, casualties) %>%
     ggplot(mapping = aes(
-      x = reorder(target1, -casualties),
+      x = reorder(target1,-casualties),
       y = casualties,
       fill = target1
     )) +
