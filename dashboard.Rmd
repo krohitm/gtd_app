@@ -47,6 +47,36 @@ Sys.setlocale('LC_ALL','C')
 General Figures
 =======================================================================
 
+Row
+-----------------------------------------------------------------------
+
+### Years of data
+
+```{r}
+years <- terr$year %>%
+  max() -
+terr$year %>%
+  min()
+
+valueBox(years, icon = "ion-calendar")
+```
+
+### Total Attacks
+
+```{r}
+terr %>%
+  summarise(n()) %>%
+  valueBox(icon = "ion-nuclear", color = 'orange')
+```
+
+### Total Casualties
+
+```{r}
+terr %>%
+  summarise(sum(casualties)) %>%
+  valueBox(icon = "ion-people", color = 'red')
+```
+
 Row {.tabset}
 -----------------------------------------------------------------------
 
