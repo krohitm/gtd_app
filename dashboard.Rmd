@@ -94,13 +94,14 @@ Row {.tabset}
 ### Attacks around the world
 
 ```{r}
-startYear <- reactive(as.integer(input$yearRange[1]))
-endYear <- reactive(as.integer(input$yearRange[2]))
+#startYear <- reactive(as.integer(input$yearRange[1]))
+#endYear <- reactive(as.integer(input$yearRange[2]))
 
 
 renderPlotly({
   terr %>%
-    filter(year >= startYear(), year <= endYear()) %>%
+    filter(year >= input$yearRange[1], 
+           year <= input$yearRange[2]) %>%
     group_by(nation) %>%
     summarise(Total=n()) %>%
     visualizeCountMap(world, "Number of terrorist attacks around the world")})
@@ -109,39 +110,51 @@ renderPlotly({
 ### Deaths around the world
 
 ```{r}
+renderPlotly({
 terr %>%
-  group_by(nation) %>%
-  summarise(Total = sum(Killed)) %>%
-  visualizeCountMap(world, "Number of Deaths around the world")
+    filter(year >= input$yearRange[1], 
+           year <= input$yearRange[2]) %>%
+    group_by(nation) %>%
+    summarise(Total = sum(Killed)) %>%
+    visualizeCountMap(world, "Number of Deaths around the world")})
 ```
 
 ### Injured around the world
 
 ```{r}
-terr %>%
-  group_by(nation) %>%
-  summarise(Total = sum(wounded)) %>%
-  visualizeCountMap(world, "Number of Injured around the world")
+renderPlotly({
+  terr %>%
+    filter(year >= input$yearRange[1], 
+           year <= input$yearRange[2]) %>%
+    group_by(nation) %>%
+    summarise(Total = sum(wounded)) %>%
+    visualizeCountMap(world, "Number of Injured around the world")})
 ```
 
 ### International Attacks
 
 ```{r}
-terr[c('nation', 'INT_ANY')] %>% 
-  filter(INT_ANY=='1') %>%
+renderPlotly({
+  terr[c('nation', 'INT_ANY', 'year')] %>% 
+    filter(INT_ANY=='1',
+           year >= input$yearRange[1], 
+           year <= input$yearRange[2]) %>%
   group_by(nation) %>%
   summarise(Total=n()) %>%
-  visualizeCountMap(world, "International attacks around the globe")
+  visualizeCountMap(world, "International attacks around the globe")})
 ```
 
 ### Domestic Attacks
 
 ```{r}
-terr[c('nation', 'INT_ANY')] %>% 
-  filter(INT_ANY=='0') %>%
+renderPlotly({
+terr[c('nation', 'INT_ANY', 'year')] %>% 
+  filter(INT_ANY=='0',
+           year >= input$yearRange[1], 
+           year <= input$yearRange[2]) %>%
   group_by(nation) %>%
   summarise(Total=n()) %>%
-  visualizeCountMap(world, "International attacks around the globe")
+  visualizeCountMap(world, "Domestic attacks around the globe")})
 ```
 
 Row
@@ -150,13 +163,19 @@ Row
 ### Attacks over years
 
 ```{r}
-attacksOverYears(terr)
+renderPlotly({terr %>%
+    filter(year >= input$yearRange[1], 
+           year <= input$yearRange[2]) %>%
+    attacksOverYears()})
 ```
 
 ### Casualties over years
 
 ```{r}
-casualtiesOverYears(terr)
+renderPlotly({terr %>%
+    filter(year >= input$yearRange[1], 
+           year <= input$yearRange[2]) %>%
+    casualtiesOverYears()})
 ```
 
 Factors

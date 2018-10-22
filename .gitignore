@@ -3,3 +3,4 @@
 ./data
 codebase*.R
 *.html
+.Rproj.user
