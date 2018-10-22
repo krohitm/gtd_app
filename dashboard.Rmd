@@ -145,6 +145,45 @@ casualtiesOverYears(terr)
 Factors
 =======================================================================
 
+Row
+-----------------------------------------------------------------------
+
+### Most Used Weapon
+
+```{r}
+terr %>%
+  group_by(weapon) %>%
+  summarise(n()) %>%
+  top_n(1) %>%
+  pull('weapon') %>%
+  valueBox()
+```
+
+### Major Target
+
+```{r}
+terr %>%
+  group_by(target) %>%
+  summarise(n()) %>%
+  top_n(1) %>%
+  pull('target') %>%
+  valueBox()
+```
+
+
+### Most Active Group
+
+```{r}
+terr %>%
+  filter(gname != 'Unknown') %>%
+  group_by(gname) %>%
+  summarise(n()) %>%
+  top_n(1) %>%
+  pull('gname') %>%
+  valueBox()
+```
+
+
 Row {.tabset}
 -----------------------------------------------------------------------
 
