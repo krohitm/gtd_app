@@ -22,5 +22,6 @@ visualizeCountMap <- function(global_table, world, title) {
     #ggtitle(title) +
     ditch_the_axes
   
-  ggplotly(graph)
+  ggplotly(graph) %>%
+    return()
 }
