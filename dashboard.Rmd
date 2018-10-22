@@ -22,7 +22,6 @@ library(plotly)
 source ('./functions/dataImport.R', local = T)
 source ('./functions/attacksOverYears.R', local = T)
 source ('./functions/casualtiesOverYears.R', local = T)
-source ('./functions/highCasualtyAttacks.R', local = T)
 source ('./functions/highCasualtyFactor.R', local = T)
 source('./functions/mostAttackedCountries.R', local = T)
 source('./functions/visualizeCountMap.R', local = T)
@@ -125,31 +124,6 @@ renderPlotly({
     visualizeCountMap(world, "Number of Injured around the world")})
 ```
 
-### International Attacks
-
-```{r}
-renderPlotly({
-  terr[c('nation', 'INT_ANY', 'year')] %>% 
-    filter(INT_ANY=='1',
-           year >= input$yearRange[1], 
-           year <= input$yearRange[2]) %>%
-  group_by(nation) %>%
-  summarise(Total=n()) %>%
-  visualizeCountMap(world, "International attacks around the globe")})
-```
-
-### Domestic Attacks
-
-```{r}
-renderPlotly({
-terr[c('nation', 'INT_ANY', 'year')] %>% 
-  filter(INT_ANY=='0',
-           year >= input$yearRange[1], 
-           year <= input$yearRange[2]) %>%
-  group_by(nation) %>%
-  summarise(Total=n()) %>%
-  visualizeCountMap(world, "Domestic attacks around the globe")})
-```
 
 Row
 -----------------------------------------------------------------------
