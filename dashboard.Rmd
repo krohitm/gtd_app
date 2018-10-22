@@ -178,14 +178,6 @@ terr %>%
 Row {.tabset}
 -----------------------------------------------------------------------
 
-### Most used weapons across countries
-
-```{r}
-visualizeFactorMap(terr, world, 'weapon',
-                   "Most used weapons in terrorist attacks around the world") %>%
-  ggplotly()
-```
-
 ### Most used Attack Methods across countries
 
 ```{r}
