@@ -54,11 +54,6 @@ sliderInput('yearRange', 'Year Range',
             step = 1, sep = "")
 ```
 
-```{r}
-range <- reactive({input$range})
-renderText({range()})
-```
-
 
 General Figures
 =======================================================================
@@ -99,11 +94,16 @@ Row {.tabset}
 ### Attacks around the world
 
 ```{r}
-g <- terr %>%
-  group_by(nation) %>%
-  summarise(Total = n()) %>%
-  visualizeCountMap(world, "Number of terrorist attacks around the world") 
-renderPlotly(g)
+startYear <- reactive(as.integer(input$yearRange[1]))
+endYear <- reactive(as.integer(input$yearRange[2]))
+
+
+renderPlotly({
+  terr %>%
+    filter(year >= startYear(), year <= endYear()) %>%
+    group_by(nation) %>%
+    summarise(Total=n()) %>%
+    visualizeCountMap(world, "Number of terrorist attacks around the world")})
 ```
 
 ### Deaths around the world
