@@ -100,7 +100,7 @@ renderPlotly({
     visualizeCountMap(world, "Number of terrorist attacks around the world")})
 ```
 
-### Deaths around the world
+### Casualties around the world
 
 ```{r}
 renderPlotly({
@@ -108,22 +108,9 @@ terr %>%
     filter(year >= input$yearRange[1], 
            year <= input$yearRange[2]) %>%
     group_by(nation) %>%
-    summarise(Total = sum(Killed)) %>%
-    visualizeCountMap(world, "Number of Deaths around the world")})
+    summarise(Total = sum(casualties)) %>%
+    visualizeCountMap(world, "Number of Casualties around the world")})
 ```
-
-### Injured around the world
-
-```{r}
-renderPlotly({
-  terr %>%
-    filter(year >= input$yearRange[1], 
-           year <= input$yearRange[2]) %>%
-    group_by(nation) %>%
-    summarise(Total = sum(wounded)) %>%
-    visualizeCountMap(world, "Number of Injured around the world")})
-```
-
 
 Row
 -----------------------------------------------------------------------
