@@ -40,10 +40,16 @@ Sys.setlocale('LC_ALL','C')
 Sidebar {.sidebar}
 =======================================================================
 ```{r}
+# year slider input for reactive map
 sliderInput('yearRange', 'Year Range',
             min = min(terr$year), max = max(terr$year),
             value = c(min(terr$year), max(terr$year)),
             step = 1, sep = "")
+
+#country drop down input for yearly trend
+selectInput('selectCountry', 'Select Country',
+            choices = terr$nation)
+
 ```
 
 
