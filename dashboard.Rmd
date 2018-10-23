@@ -25,7 +25,6 @@ source ('./functions/casualtiesOverYears.R', local = T)
 source ('./functions/highCasualtyFactor.R', local = T)
 source('./functions/mostAttackedCountries.R', local = T)
 source('./functions/visualizeCountMap.R', local = T)
-#source('./functions/casualtiesAttacksOverYears.R', local = T)
 ```
 
 ```{r}
@@ -53,7 +52,8 @@ nationNames <- terr %>%
   
 #country drop down input for yearly trend
 selectInput('selectCountry', 'Select Country',
-            choices = dplyr::arrange(nationNames))
+            choices = c(nationNames,'All'),
+            selected = 'All')
 
 ```
 
@@ -128,8 +128,13 @@ Row {.tabset}
 
 ```{r}
 renderPlotly({
-  graph <- terr %>%
+  #select All for all countries
+  graph <- if (input$selectCountry != 'All')
+    terr %>%
     filter(nation == input$selectCountry) %>%
+    attacksOverYears()
+  else
+    terr %>%
     attacksOverYears()
   
   ggplotly(graph)})
@@ -139,12 +144,27 @@ renderPlotly({
 
 ```{r}
 renderPlotly({
-  graph <- terr %>%
+  graph <- if (input$selectCountry != 'All' )
+    terr %>%
     filter(nation == input$selectCountry) %>%
     casualtiesOverYears()
-  
+  else
+    terr %>%
+    casualtiesOverYears()
+    
   ggplotly(graph)})
 ```
+
+### Corresponsing Data - filler for corresponding data
+
+```{r}
+#renderTable({
+#  terr %>%
+#    filter(nation == input$selectCountry)
+#})
+```
+
+
 
 Factors
 =======================================================================
