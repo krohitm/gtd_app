@@ -17,5 +17,8 @@ casualtiesOverYears <- function(terr) {
           axis.text.x = element_text(angle = 45, vjust = 1)) +
     labs(x = "Year", y = "Count")#,
   #title = "Number of casualties over years")
-  ggplotly(graph)
+  
+  #removed plotly for lite version
+  #ggplotly(graph) %>%
+  return(graph)
 }

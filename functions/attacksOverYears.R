@@ -12,5 +12,7 @@ attacksOverYears <- function(terr) {
     ) +
     labs(x = "Year", y = "Number of attacks")
   
-  ggplotly(graph)
+  #removed plotly for lite version
+  #ggplotly(graph) %>%
+  return(graph)
 }

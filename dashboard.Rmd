@@ -25,7 +25,6 @@ source ('./functions/casualtiesOverYears.R', local = T)
 source ('./functions/highCasualtyFactor.R', local = T)
 source('./functions/mostAttackedCountries.R', local = T)
 source('./functions/visualizeCountMap.R', local = T)
-source('./functions/visualizeFactorMap.R', local = T)
 ```
 
 ```{r}
@@ -91,7 +90,7 @@ Row {.tabset}
 #endYear <- reactive(as.integer(input$yearRange[2]))
 
 
-renderPlotly({
+renderPlot({
   terr %>%
     filter(year >= input$yearRange[1], 
            year <= input$yearRange[2]) %>%
@@ -103,7 +102,7 @@ renderPlotly({
 ### Casualties around the world
 
 ```{r}
-renderPlotly({
+renderPlot({
 terr %>%
     filter(year >= input$yearRange[1], 
            year <= input$yearRange[2]) %>%
@@ -118,7 +117,7 @@ Row
 ### Attacks over years
 
 ```{r}
-renderPlotly({terr %>%
+renderPlot({terr %>%
     filter(year >= input$yearRange[1], 
            year <= input$yearRange[2]) %>%
     attacksOverYears()})
@@ -127,7 +126,7 @@ renderPlotly({terr %>%
 ### Casualties over years
 
 ```{r}
-renderPlotly({terr %>%
+renderPlot({terr %>%
     filter(year >= input$yearRange[1], 
            year <= input$yearRange[2]) %>%
     casualtiesOverYears()})
@@ -150,18 +149,6 @@ terr %>%
   valueBox(icon = "ion-nuclear")
 ```
 
-### Major Target
-
-```{r}
-terr %>%
-  group_by(target) %>%
-  summarise(n()) %>%
-  top_n(1) %>%
-  pull('target') %>%
-  valueBox(icon = "ion-close-circle-outline")
-```
-
-
 ### Most Active Group
 
 ```{r}
@@ -174,37 +161,6 @@ terr %>%
   valueBox(icon = 'ion-people')
 ```
 
-
-Row {.tabset}
------------------------------------------------------------------------
-
-### Most used Attack Methods across countries
-
-```{r}
-visualizeFactorMap(terr, world, 'attack',
-                   "Most used attack methods around the world") %>%
-  ggplotly()
-```
-
-### Major target across countries
-
-```{r}
-visualizeFactorMap(terr, world, 'target',
-                   "Most attacked targets around the world") %>%
-  ggplotly()
-```
-
-### Most active groups across countries
-
-```{r}
-graph <- terr %>%
-  filter(gname != "Unknown") %>%
-  visualizeFactorMap(world, 'gname',
-                   "Most active groups around the world") +
-  theme(legend.position = "none")
-
-ggplotly(graph)
-```
 
 Row {.tabset}
 -----------------------------------------------------------------------
