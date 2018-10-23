@@ -55,6 +55,15 @@ selectInput('selectWeapon', 'Select Weapon',
             choices = c(weapons,'All'),
             selected = 'All')
 
+#options for target type
+targets <- terr %>%
+  distinct(target)
+
+#targets drop down input for map
+selectInput('selectTarget', 'Select Target Type',
+            choices = c(targets, 'All'),
+            selected = 'All')
+
 
 #options for countries drop down
 nationNames <- terr %>%
@@ -64,7 +73,6 @@ nationNames <- terr %>%
 selectInput('selectCountry', 'Select Country',
             choices = c(nationNames,'All'),
             selected = 'All')
-
 ```
 
 
@@ -116,6 +124,10 @@ renderPlot({
       filter(., weapon == input$selectWeapon)
       else
         .} %>%
+    {if (input$selectTarget != 'All') 
+      filter(., target == input$selectTarget)
+      else
+        .} %>%
     filter(year >= input$yearRange[1], 
            year <= input$yearRange[2]) %>%
     group_by(nation) %>%
@@ -132,6 +144,10 @@ renderPlot({
       filter(., weapon == input$selectWeapon)
       else
       .} %>%
+    {if (input$selectTarget != 'All') 
+      filter(., target == input$selectTarget)
+      else
+        .} %>%
     filter(year >= input$yearRange[1], 
            year <= input$yearRange[2]) %>%
     group_by(nation) %>%
@@ -147,12 +163,11 @@ Row {.tabset}
 ```{r}
 renderPlotly({
   #select All for all countries
-  graph <- if (input$selectCountry != 'All')
-    terr %>%
-    filter(nation == input$selectCountry) %>%
-    attacksOverYears()
-  else
-    terr %>%
+  graph <- terr %>%
+    {if (input$selectCountry != 'All') 
+      filter(., nation == input$selectCountry)
+      else
+        .}%>%
     attacksOverYears()
   
   ggplotly(graph)})
@@ -162,12 +177,11 @@ renderPlotly({
 
 ```{r}
 renderPlotly({
-  graph <- if (input$selectCountry != 'All' )
-    terr %>%
-    filter(nation == input$selectCountry) %>%
-    casualtiesOverYears()
-  else
-    terr %>%
+  graph <- terr %>%
+    {if (input$selectCountry != 'All') 
+      filter(., nation == input$selectCountry)
+      else
+        .} %>%
     casualtiesOverYears()
     
   ggplotly(graph)})
