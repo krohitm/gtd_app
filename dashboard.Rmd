@@ -25,6 +25,7 @@ source ('./functions/casualtiesOverYears.R', local = T)
 source ('./functions/highCasualtyFactor.R', local = T)
 source('./functions/mostAttackedCountries.R', local = T)
 source('./functions/visualizeCountMap.R', local = T)
+#source('./functions/casualtiesAttacksOverYears.R', local = T)
 ```
 
 ```{r}
@@ -99,7 +100,6 @@ Row {.tabset}
 #startYear <- reactive(as.integer(input$yearRange[1]))
 #endYear <- reactive(as.integer(input$yearRange[2]))
 
-
 renderPlot({
   terr %>%
     filter(year >= input$yearRange[1], 
@@ -121,10 +121,10 @@ terr %>%
     visualizeCountMap(world, "Number of Casualties around the world")})
 ```
 
-Row
+Row {.tabset}
 -----------------------------------------------------------------------
 
-### Attacks over years
+### Attacks over the years
 
 ```{r}
 renderPlotly({
@@ -135,7 +135,7 @@ renderPlotly({
   ggplotly(graph)})
 ```
 
-### Casualties over years
+### Casualties over the years
 
 ```{r}
 renderPlotly({
