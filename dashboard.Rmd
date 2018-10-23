@@ -46,9 +46,19 @@ sliderInput('yearRange', 'Year Range',
             value = c(min(terr$year), max(terr$year)),
             step = 1, sep = "")
 
+#options for attack types
+weapons <- terr %>%
+  distinct(weapon)
+
+#weapons drop down input for map
+selectInput('selectWeapon', 'Select Weapon',
+            choices = c(weapons,'All'),
+            selected = 'All')
+
+
+#options for countries drop down
 nationNames <- terr %>%
-  dplyr::select(nation) %>%
-  dplyr::distinct()
+  distinct(nation)
   
 #country drop down input for yearly trend
 selectInput('selectCountry', 'Select Country',
@@ -102,6 +112,10 @@ Row {.tabset}
 
 renderPlot({
   terr %>%
+    {if (input$selectWeapon != 'All') 
+      filter(., weapon == input$selectWeapon)
+      else
+        .} %>%
     filter(year >= input$yearRange[1], 
            year <= input$yearRange[2]) %>%
     group_by(nation) %>%
@@ -113,7 +127,11 @@ renderPlot({
 
 ```{r}
 renderPlot({
-terr %>%
+  terr %>%
+    {if (input$selectWeapon != 'All') 
+      filter(., weapon == input$selectWeapon)
+      else
+      .} %>%
     filter(year >= input$yearRange[1], 
            year <= input$yearRange[2]) %>%
     group_by(nation) %>%
