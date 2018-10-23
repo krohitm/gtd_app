@@ -73,6 +73,15 @@ nationNames <- terr %>%
 selectInput('selectCountry', 'Select Country',
             choices = c(nationNames,'All'),
             selected = 'All')
+
+#options for group drop down
+groups <- terr %>%
+  distinct(gname)
+
+#group drop down input for yearly trend
+selectInput('selectGroup', 'Select Terrorist Group',
+            choices = c(groups, 'All'),
+            selected = 'All')
 ```
 
 
@@ -168,7 +177,11 @@ renderPlotly({
       filter(., nation == input$selectCountry)
       else
         .}%>%
-    attacksOverYears()
+    {if (input$selectGroup != 'All') 
+      filter(., gname == input$selectGroup)
+      else
+        .} %>%
+    attacksOverYears(xstart = min(terr$year), xend = max(terr$year))
   
   ggplotly(graph)})
 ```
@@ -182,7 +195,11 @@ renderPlotly({
       filter(., nation == input$selectCountry)
       else
         .} %>%
-    casualtiesOverYears()
+    {if (input$selectGroup != 'All') 
+      filter(., gname == input$selectGroup)
+      else
+        .} %>%
+    casualtiesOverYears(xstart = min(terr$year), xend = max(terr$year))
     
   ggplotly(graph)})
 ```
