@@ -46,9 +46,14 @@ sliderInput('yearRange', 'Year Range',
             value = c(min(terr$year), max(terr$year)),
             step = 1, sep = "")
 
+nationNames <- terr %>%
+  dplyr::pull(nation) %>%
+  dplyr::distinct() %>%
+  dplyr::arrange()
+  
 #country drop down input for yearly trend
 selectInput('selectCountry', 'Select Country',
-            choices = terr$nation)
+            choices = nationNames)
 
 ```
 
