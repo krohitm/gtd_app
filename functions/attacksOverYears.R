@@ -1,11 +1,11 @@
 #global attacks over years
-attacksOverYears <- function(terr) {
+attacksOverYears <- function(terr, xstart=1970, xend=2015) {
   attacksCount <- terr %>%
     group_by(year) %>%
     summarize(NoOfAttacks = n()) 
   
   #adding missing years when no attacks occured
-  yearRange <- data.frame(year = seq(min(terr$year), max(terr$year), by = 1))
+  yearRange <- data.frame(year = seq(xstart, xend, by = 1))
   attacksCountFull <- yearRange %>%
     left_join(attacksCount, by = 'year')
   attacksCountFull$NoOfAttacks[is.na(attacksCountFull$NoOfAttacks)] <- 0

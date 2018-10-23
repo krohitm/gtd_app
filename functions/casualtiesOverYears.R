@@ -1,5 +1,5 @@
 #function to plot casualties over years
-casualtiesOverYears <- function(terr) {
+casualtiesOverYears <- function(terr, xstart=1970, xend = 2015) {
   #global casualties over years
   casualtiesCount <- terr[c('year', 'Killed', 'wounded')] %>%
     group_by(year) %>%
@@ -9,7 +9,7 @@ casualtiesOverYears <- function(terr) {
     ) 
   
   #adding missing years when no casualties occured
-  yearRange <- data.frame(year = seq(min(terr$year), max(terr$year), by = 1))
+  yearRange <- data.frame(year = seq(xstart, xend, by = 1))
   casualtiesCountFull <- yearRange %>%
     left_join(casualtiesCount, by = 'year')
   casualtiesCountFull$killed[is.na(casualtiesCountFull$killed)] <- 0
