@@ -1,8 +1,16 @@
 #global attacks over years
 attacksOverYears <- function(terr) {
-  graph <- terr %>%
+  attacksCount <- terr %>%
     group_by(year) %>%
-    summarize(NoOfAttacks = n()) %>%
+    summarize(NoOfAttacks = n()) 
+  
+  #adding missing years when no attacks occured
+  yearRange <- data.frame(year = seq(min(terr$year), max(terr$year), by = 1))
+  attacksCountFull <- yearRange %>%
+    left_join(attacksCount, by = 'year')
+  attacksCountFull$NoOfAttacks[is.na(attacksCountFull$NoOfAttacks)] <- 0
+  
+  graph <- attacksCountFull %>%
     ggplot(mapping = aes(year, NoOfAttacks)) +
     geom_line(color = "red") +
     theme(

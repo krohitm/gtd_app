@@ -47,13 +47,12 @@ sliderInput('yearRange', 'Year Range',
             step = 1, sep = "")
 
 nationNames <- terr %>%
-  dplyr::pull(nation) %>%
-  dplyr::distinct() %>%
-  dplyr::arrange()
+  dplyr::select(nation) %>%
+  dplyr::distinct()
   
 #country drop down input for yearly trend
 selectInput('selectCountry', 'Select Country',
-            choices = nationNames)
+            choices = dplyr::arrange(nationNames))
 
 ```
 
@@ -128,19 +127,23 @@ Row
 ### Attacks over years
 
 ```{r}
-renderPlot({terr %>%
-    filter(year >= input$yearRange[1], 
-           year <= input$yearRange[2]) %>%
-    attacksOverYears()})
+renderPlotly({
+  graph <- terr %>%
+    filter(nation == input$selectCountry) %>%
+    attacksOverYears()
+  
+  ggplotly(graph)})
 ```
 
 ### Casualties over years
 
 ```{r}
-renderPlot({terr %>%
-    filter(year >= input$yearRange[1], 
-           year <= input$yearRange[2]) %>%
-    casualtiesOverYears()})
+renderPlotly({
+  graph <- terr %>%
+    filter(nation == input$selectCountry) %>%
+    casualtiesOverYears()
+  
+  ggplotly(graph)})
 ```
 
 Factors
