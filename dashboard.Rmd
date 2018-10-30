@@ -37,8 +37,14 @@ world <- map_data("world")
 Sys.setlocale('LC_ALL','C')
 ```
 
-Sidebar {.sidebar}
+
+
+
+General Figures
 =======================================================================
+
+Sidebar {.sidebar}
+-----------------------------------------------------------------------
 
 #### **Common Filters**
 ```{r}
@@ -99,10 +105,6 @@ selectInput('selectGroup', 'Terrorist group responsible',
             choices = c(groups, 'All'),
             selected = 'All')
 ```
-
-
-General Figures
-=======================================================================
 
 Row
 -----------------------------------------------------------------------
@@ -294,6 +296,13 @@ terr %>%
   valueBox(icon = 'ion-people')
 ```
 
+Sidebar {.sidebar}
+-----------------------------------------------------------------------
+```{r}
+numericInput('xaxisTicks', 'How many values to show on x-axis?', 10,
+             5, 100, 1)
+```
+
 
 Row {.tabset}
 -----------------------------------------------------------------------
@@ -301,36 +310,37 @@ Row {.tabset}
 ### **High Casualty Attacks**
 
 ```{r}
-n = 10
-
-terr[c('target1', 'casualties')] %>%
-  top_n(n, casualties) %>% 
-  mutate(target1 = forcats::fct_reorder(target1, -casualties)) %>%
-  highCasualtyFactor('target1', 'casualties', 
-                     xlab = 'Attack Target', ylab = 'Casualty Count')
+renderPlotly({
+  graph <- terr[c('target1', 'casualties')] %>%
+    top_n(input$xaxisTicks, casualties) %>% 
+    mutate(target1 = forcats::fct_reorder(target1, -casualties)) %>%
+    highCasualtyFactor('target1', 'casualties', 
+                     xlab = 'Attack Target', ylab = 'Casualty Count')})
 ```
 
 ### **High Casualty Terrorist Groups**
 
 ```{r}
-terr[c('gname', 'casualties')]%>%
-  filter(gname!='Unknown') %>%
-  group_by(gname) %>%
-  summarise(casualties=n()) %>%
-  top_n(n, casualties) %>%
-  mutate(gname = forcats::fct_reorder(gname, -casualties)) %>%
-  highCasualtyFactor('gname', 'casualties', 
-                     xlab = 'Terrorist Group', ylab = 'Casualty Count')
+renderPlotly(({
+  graph <- terr[c('gname', 'casualties')]%>%
+    filter(gname!='Unknown') %>%
+    group_by(gname) %>%
+    summarise(casualties=n()) %>%
+    top_n(input$xaxisTicks, casualties) %>%
+    mutate(gname = forcats::fct_reorder(gname, -casualties)) %>%
+    highCasualtyFactor('gname', 'casualties', 
+                     xlab = 'Terrorist Group', ylab = 'Casualty Count')}))
 ```
 
 ### **Most Attacked Countries**
 
 ```{r}
-terr['nation'] %>%
-  group_by(nation) %>%
-  summarise(Total=n()) %>%
-  top_n(n, Total) %>%
-  mutate(nation = forcats::fct_reorder(nation, -Total)) %>%
-  highCasualtyFactor('nation', 'Total', 
-                     xlab = 'Country', ylab = 'Attacks Count')
+renderPlotly({
+  graph <- terr['nation'] %>%
+    group_by(nation) %>%
+    summarise(Total=n()) %>%
+    top_n(input$xaxisTicks, Total) %>%
+    mutate(nation = forcats::fct_reorder(nation, -Total)) %>%
+    highCasualtyFactor('nation', 'Total', 
+                       xlab = 'Country', ylab = 'Attacks Count')})
 ```
