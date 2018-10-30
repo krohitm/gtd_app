@@ -2,7 +2,7 @@
 #function to import and clean data
 dataImport <- function() {
   #input data
-  terr <- url('https://raw.github.com/krohitm/gtd_app/master/data/globalterrorismdb_0616dist.rds') %>%
+  terr <- url('https://raw.github.com/krohitm/gtd_app/master/data/globalterrorismdb_0718dist.rds') %>%
                 readRDS()
   
   #data cleaning

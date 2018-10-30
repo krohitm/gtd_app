@@ -1,5 +1,5 @@
 ---
-title: "Global Terrorism Analysis (1970 - 2015)"
+title: "Global Terrorism Analysis (1970 - 2017)"
 output: 
   flexdashboard::flex_dashboard:
     vertical_layout: scroll
@@ -115,7 +115,7 @@ Row
 years <- terr$year %>%
   max() -
 terr$year %>%
-  min()
+  min() + 1
 
 valueBox(years, icon = "ion-calendar")
 ```
@@ -301,6 +301,8 @@ Sidebar {.sidebar}
 ```{r}
 numericInput('xaxisTicks', 'How many values to show on x-axis?', 10,
              5, 100, 1)
+
+
 ```
 
 
@@ -344,3 +346,6 @@ renderPlotly({
     highCasualtyFactor('nation', 'Total', 
                        xlab = 'Country', ylab = 'Attacks Count')})
 ```
+
+
+
