@@ -1,0 +1,12 @@
+name: gtd_app
+title: gtd_app
+username:
+account: krohitm
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 529328
+bundleId: 1671095
+url: https://krohitm.shinyapps.io/gtd_app/
+when: 1540864402.16034
+asMultiple: FALSE
+asStatic: FALSE

@@ -39,9 +39,23 @@ Sys.setlocale('LC_ALL','C')
 
 Sidebar {.sidebar}
 =======================================================================
+
+#### **Common Filters**
+```{r}
+#options for attack logistics
+attackLogistics <- c('International', 'Domestic', 'All')
+
+#targets drop down input for map
+selectInput('selectLogistic', 'Logistic of Attack',
+            choices = attackLogistics,
+            selected = 'All')
+```
+
+
+#### **Filters for map** 
 ```{r}
 # year slider input for reactive map
-sliderInput('yearRange', 'Year Range',
+sliderInput('yearRange', 'Years of attacks',
             min = min(terr$year), max = max(terr$year),
             value = c(min(terr$year), max(terr$year)),
             step = 1, sep = "")
@@ -51,7 +65,7 @@ weapons <- terr %>%
   distinct(weapon)
 
 #weapons drop down input for map
-selectInput('selectWeapon', 'Select Weapon',
+selectInput('selectWeapon', 'Weapon used for attack',
             choices = c(weapons,'All'),
             selected = 'All')
 
@@ -60,17 +74,19 @@ targets <- terr %>%
   distinct(target)
 
 #targets drop down input for map
-selectInput('selectTarget', 'Select Target Type',
+selectInput('selectTarget', 'Main target',
             choices = c(targets, 'All'),
             selected = 'All')
+```
 
-
+#### **Filters for trends** 
+```{r}
 #options for countries drop down
 nationNames <- terr %>%
   distinct(nation)
   
 #country drop down input for yearly trend
-selectInput('selectCountry', 'Select Country',
+selectInput('selectCountry', 'Country where attack occured',
             choices = c(nationNames,'All'),
             selected = 'All')
 
@@ -79,7 +95,7 @@ groups <- terr %>%
   distinct(gname)
 
 #group drop down input for yearly trend
-selectInput('selectGroup', 'Select Terrorist Group',
+selectInput('selectGroup', 'Terrorist group responsible',
             choices = c(groups, 'All'),
             selected = 'All')
 ```
@@ -121,34 +137,43 @@ terr %>%
 Row {.tabset}
 -----------------------------------------------------------------------
 
-### Attacks around the world
+### **Attacks around the world**
 
 ```{r}
 #startYear <- reactive(as.integer(input$yearRange[1]))
 #endYear <- reactive(as.integer(input$yearRange[2]))
 
-renderPlot({
-  terr %>%
+renderPlotly({
+  graph <- terr %>%
     {if (input$selectWeapon != 'All') 
       filter(., weapon == input$selectWeapon)
       else
         .} %>%
-    {if (input$selectTarget != 'All') 
+    {if (input$selectTarget != 'All')
       filter(., target == input$selectTarget)
+      else
+        .} %>%
+    {if (input$selectLogistic != 'All')
+      if (input$selectLogistic == 'International')
+        filter(., INT_ANY == '1')
+        else
+          filter(., INT_ANY == '0')
       else
         .} %>%
     filter(year >= input$yearRange[1], 
            year <= input$yearRange[2]) %>%
     group_by(nation) %>%
     summarise(Total=n()) %>%
-    visualizeCountMap(world, "Number of terrorist attacks around the world")})
+    visualizeCountMap(world, "Number of terrorist attacks around the world") 
+    
+  ggplotly(graph)})
 ```
 
-### Casualties around the world
+### **Casualties around the world**
 
 ```{r}
-renderPlot({
-  terr %>%
+renderPlotly({
+  graph <- terr %>%
     {if (input$selectWeapon != 'All') 
       filter(., weapon == input$selectWeapon)
       else
@@ -157,17 +182,26 @@ renderPlot({
       filter(., target == input$selectTarget)
       else
         .} %>%
+    {if (input$selectLogistic != 'All')
+      if (input$selectLogistic == 'International')
+        filter(., INT_ANY == '1')
+        else
+          filter(., INT_ANY == '0')
+      else
+        .} %>%
     filter(year >= input$yearRange[1], 
            year <= input$yearRange[2]) %>%
     group_by(nation) %>%
     summarise(Total = sum(casualties)) %>%
-    visualizeCountMap(world, "Number of Casualties around the world")})
+    visualizeCountMap(world, "Number of Casualties around the world")
+  
+  ggplotly(graph)})
 ```
 
 Row {.tabset}
 -----------------------------------------------------------------------
 
-### Attacks over the years
+### **Attacks over the years**
 
 ```{r}
 renderPlotly({
@@ -181,12 +215,19 @@ renderPlotly({
       filter(., gname == input$selectGroup)
       else
         .} %>%
+    {if (input$selectLogistic != 'All')
+      if (input$selectLogistic == 'International')
+        filter(., INT_ANY == '1')
+        else
+          filter(., INT_ANY == '0')
+      else
+        .} %>%
     attacksOverYears(xstart = min(terr$year), xend = max(terr$year))
   
   ggplotly(graph)})
 ```
 
-### Casualties over the years
+### **Casualties over the years**
 
 ```{r}
 renderPlotly({
@@ -197,6 +238,13 @@ renderPlotly({
         .} %>%
     {if (input$selectGroup != 'All') 
       filter(., gname == input$selectGroup)
+      else
+        .} %>%
+    {if (input$selectLogistic != 'All')
+      if (input$selectLogistic == 'International')
+        filter(., INT_ANY == '1')
+        else
+          filter(., INT_ANY == '0')
       else
         .} %>%
     casualtiesOverYears(xstart = min(terr$year), xend = max(terr$year))
@@ -213,7 +261,9 @@ renderPlotly({
 #})
 ```
 
-
+Row
+-----------------------------------------------------------------------
+Source: National Consortium for the Study of Terrorism and Responses to Terrorism (START). (2018). Global Terrorism Database [Data file]. Retrieved from https://www.start.umd.edu/gtd
 
 Factors
 =======================================================================
@@ -248,7 +298,7 @@ terr %>%
 Row {.tabset}
 -----------------------------------------------------------------------
 
-### High Casualty Attacks
+### **High Casualty Attacks**
 
 ```{r}
 n = 10
@@ -260,7 +310,7 @@ terr[c('target1', 'casualties')] %>%
                      xlab = 'Attack Target', ylab = 'Casualty Count')
 ```
 
-### High Casualty Terrorist Groups
+### **High Casualty Terrorist Groups**
 
 ```{r}
 terr[c('gname', 'casualties')]%>%
@@ -273,7 +323,7 @@ terr[c('gname', 'casualties')]%>%
                      xlab = 'Terrorist Group', ylab = 'Casualty Count')
 ```
 
-### Most Attacked Countries
+### **Most Attacked Countries**
 
 ```{r}
 terr['nation'] %>%
